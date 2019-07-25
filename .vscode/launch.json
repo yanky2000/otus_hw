@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/hw_streams.js"
+            "program": "${workspaceFolder}/hw_streams/mergeSort.js"
         }
     ]
 }
