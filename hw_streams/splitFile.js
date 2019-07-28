@@ -1,42 +1,68 @@
-const fs = require("fs");
-const chalk = require("chalk");
-// const pathToInitFile = require('./hw_streams');
+const fs = require('fs');
 
-// fs.readFile(pathToInitFile, (err, data) => {
-//     if (err) throw new Error(error);
-//     processFile(data.toString());
-// });
+const streamsArr = ['file1.js', 'file2.js', 'file3.js'].map(fileName => {
+	return fs.createReadStream(fileName, { highWaterMark: 1 });
+});
 
-// // divide init file into subs
+async function main(streamsArr) {
+	let cache = [];
 
-// function processFile(data) {
-// 	console.log(data);
-// }
+	// PROMISES
+	// const promises = streamsArr.map(stream => {
+	// 	return new Promise((resolve, reject) => {
+	// 		stream.on('data', chunk => {
+	// 			cache.push(chunk);
+	// 			// console.log(chunk.toString());
+	// 			stream.pause();
+	// 			resolve(chunk);
+	// 			// console.log('ac', cache);
+	// 		});
+	// 	});
+	// });
 
-const file1 = "file1.js";
-const file2 = "file2.js";
-const file3 = "file3.js";
+	// return Promise.all(promises);
 
-// const writeStream1 = fs.createWriteStream(file1);
-// writeStream1.write('heelo')
-// const readStream = fs.createReadStream('test.js');
-// readStream.pipe(writeStream1)
+	// ASYNC LOOP
+	// streamsArr.forEach(async stream => {
 
-function main(params) {
-	const stream1 = fs.createReadStream("./file1.js", { highWaterMark: 1 });
-	const stream2 = fs.createReadStream("./file2.js", { highWaterMark: 1 });
+	// 	for await (let chunk of stream) {
+	// 		cache += chunk;
+	// 		console.info('innner cache', chunk.toString());
+	// 		console.log('length', cache.length);
+	// 		stream.pause();
+	// 	}
+	// })
 
-	const streamsArr = [stream1, stream2];
+	// });
 
-	streamsArr.forEach(async stream => {
-		for await (let chunk of stream) {
-			cache += chunk;
-			console.log(cache);
-		}
+	const writeStream = fs.createWriteStream('output.js')
+
+	streamsArr.forEach(stream => {
+		stream.on('data', chunk => {
+			// console.log('object', cache);
+			cache.push(chunk.toString());
+			stream.pause();
+			// cache += chunk.toString();
+			writeStream.write(min.toString())
+			stream.resume()
+			
+			// resolve(chunk);
+			// console.log('ac', cache);
+		});
+
+		stream.on('finish', () =>{
+			console.log('finished');
+			// stream.resume()
+		})
 	});
+
+
 
 }
 
+main(streamsArr)
+
+// console.log(res);
 // async function* somefn(chunksAsync) {
 // 	for await (let chunk of chunksAsync) {
 // 		console.log(chunk.toString());
@@ -44,4 +70,24 @@ function main(params) {
 // 	}
 // }
 
-const get = main();
+// async function run(streamsArr) {
+// 	try {
+// 		const result = await main(streamsArr);
+
+// 		console.log(result.toString());
+// 		// streamsArr.forEach(stream => stream.resume());
+// 	} catch (e) {
+// 		console.log(e);
+// 	}
+// }
+
+// run(streamsArr);
+
+//  main();
+// const str = fs.createReadStream('./file1.js', { highWaterMark: 1 });
+// str.on('data', (chunk) => {
+// 	console.log(chunk.toString());
+// 	str.pause();
+// });
+
+// const get = main();
