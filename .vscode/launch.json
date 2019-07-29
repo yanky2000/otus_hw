@@ -9,6 +9,12 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/hw_streams/splitFile.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "buffer",
+            "program": "${workspaceFolder}/hw_streams/buffer.js"
         }
     ]
 }
