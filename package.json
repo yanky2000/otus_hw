@@ -1,0 +1,22 @@
+{
+  "name": "otus_hw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hw2.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanky2000/otus_hw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yanky2000/otus_hw/issues"
+  },
+  "homepage": "https://github.com/yanky2000/otus_hw#readme"
+}
