@@ -1,1 +1,3 @@
-# otus_hw
+# ДЗ
+
+- graphQl - `hw_10/README.md`
