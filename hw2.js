@@ -1,10 +1,10 @@
 async function promiseReduce(asyncFunctions, reduce, initialValue) {
-	let res;
+	let acc = initialValue;
 	for (let asyncFn of asyncFunctions) {
 		const value = await asyncFn();
-		res = reduce(initialValue, value);
+		acc = reduce(acc, value);
 	}
-	return Promise.resolve(res);
+	return acc;
 }
 
 // var fn1 = () => {
