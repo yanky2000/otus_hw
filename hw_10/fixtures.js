@@ -1,4 +1,4 @@
-const moovies = [
+const movies = [
   {
     id: 1,
     title: "Titanic",
@@ -102,4 +102,4 @@ const moovies = [
 ];
 
 const users = [{ id: 1, username: "Ivan" }];
-module.exports = { moovies, users };
+module.exports = { movies, users };

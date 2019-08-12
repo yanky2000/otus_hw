@@ -30,7 +30,7 @@ query ShowAllMoovies{
 - 2. Показать один фильм
 ```
 query ShowOneMoovie {
-    getOneMoovie(id:12) {
+    getMovieById(id:12) {
         id
         title
         genre

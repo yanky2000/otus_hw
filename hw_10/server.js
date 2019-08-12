@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
-const { moovies, users } = require("./fixtures");
+const { movies, users } = require("./fixtures");
 const uuidv1 = require("uuid/v1");
 
 const typeDefs = gql`
@@ -12,7 +12,7 @@ const typeDefs = gql`
 
   type Order {
     id: ID!
-    moovies: [Moovie]
+    movies: [Moovie]
     buyer: User!
   }
 
@@ -22,9 +22,9 @@ const typeDefs = gql`
   }
 
   type Query {
-    moovies: [Moovie]
+    movies: [Moovie]
     orders: [Order]
-    getOneMoovie(id: Int): Moovie
+    getMovieById(id: Int): Moovie
   }
 
   type OrderError {
@@ -50,10 +50,10 @@ const resolvers = {
   },
 
   Query: {
-    moovies: () => moovies,
+    movies: () => movies,
     orders: () => orders,
-    getOneMoovie: (parent, { id }) => {
-      return moovies.find(moovie => moovie.id === id);
+    getMovieById: (parent, { id }) => {
+      return movies.find(movie => movie.id === id);
     }
   },
 
@@ -62,12 +62,12 @@ const resolvers = {
       const buyer = users.find(user => user.id === buyerId);
       if (!buyer) throw new Error(`cannot find user with ID:${buyerId}`);
 
-      const moovieToAdd = moovies.find(moovie => moovie.id === moovieId);
+      const moovieToAdd = movies.find(movie => movie.id === moovieId);
 
       const newOrder = {
         id: uuidv1(),
         buyer,
-        moovies: [moovieToAdd]
+        movies: [moovieToAdd]
       };
 
       orders.push(newOrder);
