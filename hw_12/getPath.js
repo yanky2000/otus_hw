@@ -12,7 +12,7 @@ function getPath(node) {
   if (isUnique(tagName)) return tagName;
 
   // check id
-  if (node.id) return node.id;
+  if (node.id) return `#${node.id}`;
 
   // check className
   const uniqueClass = isUniqueClass(node);
@@ -25,6 +25,7 @@ function getPath(node) {
 function isUniqueClass(node) {
   const allClasses = {};
   const nodeClassList = node.classList;
+
   document.querySelectorAll("*").forEach(el => {
     if (el.className) {
       allClasses[el.className] = allClasses[el.className] + 1 || 1;
@@ -33,7 +34,7 @@ function isUniqueClass(node) {
 
   for (let i = 0; i < nodeClassList.length; i++) {
     const nodeClassName = nodeClassList[i];
-    if (allClasses[nodeClassName] === 1) return nodeClassName;
+    if (allClasses[nodeClassName] === 1) return `.${nodeClassName}`;
   }
 }
 
