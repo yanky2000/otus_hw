@@ -3,7 +3,7 @@ customElements.define(
 	class extends HTMLElement {
 		constructor() {
 			super();
-			const shadowRoot = this.attachShadow({ mode: "open" });
+			this.attachShadow({ mode: "open" });
 		}
 		connectedCallback() {
 			const tree = JSON.parse(this.getAttribute("data"));
@@ -22,7 +22,7 @@ customElements.define(
 class Leaf extends HTMLElement {
 	constructor() {
 		super();
-		const shadowRoot = this.attachShadow({ mode: "open" });
+		this.attachShadow({ mode: "open" });
 	}
 	connectedCallback() {
 		const subtree = this.getAttribute("data");
