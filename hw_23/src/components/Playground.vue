@@ -1,6 +1,6 @@
 <template>
   <div class="playground">
-   <h1>Здесь будет окно игры</h1>
+   <h1>Здесь будет основное окно</h1>
    
   </div>
 </template>
@@ -11,6 +11,7 @@ export default {
   props: {},
   data: function() {
     return {
+      
 
     };
   }
