@@ -47,7 +47,7 @@
         </li>
       </ul>
     </section>
-    <b-button variant="outline-primary">Play</b-button>
+    <b-button variant="outline-primary" @click="startGame()">PLAY</b-button>
   </div>
 </template>
 
@@ -62,6 +62,18 @@ const typeNames = [
 export default {
   name: "Settings",
   props: {},
+  methods: {
+    startGame() {
+      const { complexity, selectedTypes, duration } = this;
+      this.$router.push({
+        path: "playground",
+        query: {
+          complexity: complexity.value,
+          settings: { selectedTypes, complexity, duration }
+        }
+      });
+    }
+  },
   data: function() {
     return {
       greeting: "Привет!",
@@ -130,5 +142,9 @@ ul {
 input[range],
 .slider {
   width: 200px;
+}
+
+.btn-link {
+  border: 1px solid black;
 }
 </style>

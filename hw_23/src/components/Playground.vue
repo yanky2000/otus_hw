@@ -1,6 +1,8 @@
 <template>
   <div class="playground">
    <h1>Здесь будет основное окно</h1>
+   {{query.duration.value}}
+   {{settings}}
    
   </div>
 </template>
@@ -8,7 +10,7 @@
 <script>
 export default {
   name: "Playground",
-  props: {},
+  props: ['query'],
   data: function() {
     return {
       

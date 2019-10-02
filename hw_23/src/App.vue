@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <Settings/>
-    <Playground/>
+    <router-view />
+    <!-- <Settings/> -->
+    <!-- <Playground/> -->
   </div>
 </template>
 
 <script>
-import Settings from './components/Settings.vue'
-import Playground from './components/Playground.vue'
+// import Settings from './components/Settings.vue'
+// import Playground from './components/Playground.vue'
 
 export default {
   name: 'app',
   components: {
-    Settings,
-    Playground
+    // Settings,
+    // Playground
   }
 }
 </script>
