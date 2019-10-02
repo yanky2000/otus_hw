@@ -2,50 +2,52 @@
   <div class="settings">
     <h1>{{greeting}}</h1>
     <div>{{getOverviewMessage}}</div>
-    <h2>Настройки</h2>
     <section>
+      <h2>Настройки</h2>
       <ul class="sliders-container">
         <div class="complexity-container">
-          <div class="slider-signs">
-            <span>{{complexity.min}}</span>
-            <span>{{complexity.max}}</span>
+          <div class="slider">
+            <div class="slider-signs">
+              <span>{{complexity.min}}</span>
+              <span>{{complexity.max}}</span>
+            </div>
+            <b-form-input
+              type="range"
+              :min="complexity.min"
+              :max="complexity.max"
+              :id="complexity.name"
+              v-model="complexity.value"
+            />
           </div>
-          <input
-            type="range"
-            :min="complexity.min"
-            :max="complexity.max"
-            :id="complexity.name"
-            v-model="complexity.value"
-          />
           <div>{{complexity.name}}: {{complexity.value}} минут</div>
         </div>
 
         <div class="duration-container">
-          <div class="slider-signs">
-            <span>{{duration.min}}</span>
-            <span>{{duration.max}}</span>
+          <div class="slider">
+            <div class="slider-signs">
+              <span>{{duration.min}}</span>
+              <span>{{duration.max}}</span>
+            </div>
+            <b-form-input
+              type="range"
+              :min="duration.min"
+              :max="duration.max"
+              :id="duration.name"
+              v-model="duration.value"
+            />
           </div>
-          <input
-            type="range"
-            :min="duration.min"
-            :max="duration.max"
-            :id="duration.name"
-            v-model="duration.value"
-          />
           <div>{{duration.name}}: {{duration.value}}</div>
         </div>
       </ul>
 
       <ul class="types-container">
         <li v-for="type in typeNames" :key="type">
-          <input type="checkbox" v-model="selectedTypes" :id="type" :value="type" />
-          <label :for="type">{{type}}</label>
+          <b-form-checkbox type="checkbox" v-model="selectedTypes" :id="type" :value="type">{{type}}</b-form-checkbox>
+          <!-- <label :for="type">{{type}}</label> -->
         </li>
       </ul>
     </section>
-    <button class='play-button'>
-      Play
-    </button>
+    <b-button variant="outline-primary">Play</b-button>
   </div>
 </template>
 
@@ -78,27 +80,28 @@ export default {
         min: 1,
         max: 10
       },
-      trainingDay:'',
+      trainingDay: "",
       result: {
         last: {
           total: 0,
           solved: 0
-        }, 
+        },
         current: {
-          total: '',
-          solved: ''
+          total: "",
+          solved: ""
         }
       }
     };
   },
-  computed: 
-  {
+  computed: {
     getOverviewMessage() {
       return `Добро пожаловать на ${this.trainingDay} тренировочный день!
 
-      Ваш последний результат - решено ${this.result.solved} из ${this.result.total}.
-      Общая точность ${this.result.solved/this.result.solved}%.
-      `
+      Ваш последний результат - решено ${this.result.solved} из ${
+        this.result.total
+      }.
+      Общая точность ${this.result.solved / this.result.solved}%.
+      `;
     }
     // console.log("created!2");
   }
@@ -107,18 +110,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+section {
+  margin-top: 30px;
+}
+
 ul {
   list-style: none;
 }
 
 .slider-signs {
   display: flex;
-  width: 135px;
   justify-content: space-between;
 }
 
-.complexity-container,
-.duration-container {
+.duration-contaPciner {
   margin-bottom: 30px;
+}
+
+input[range],
+.slider {
+  width: 200px;
 }
 </style>
