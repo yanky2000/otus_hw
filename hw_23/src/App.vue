@@ -1,29 +1,25 @@
 <template>
   <div id="app">
-    <Settings/>
-    <Playground/>
+    <router-view />
   </div>
 </template>
 
 <script>
-import Settings from './components/Settings.vue'
-import Playground from './components/Playground.vue'
+import Keyboard from "./components/Keyboard.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    Settings,
-    Playground
+    Keyboard
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
 }

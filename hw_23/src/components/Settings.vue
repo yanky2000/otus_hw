@@ -2,123 +2,145 @@
   <div class="settings">
     <h1>{{greeting}}</h1>
     <div>{{getOverviewMessage}}</div>
-    <h2>Настройки</h2>
     <section>
+      <h2>Настройки</h2>
       <ul class="sliders-container">
-        <div class="complexity-container">
-          <div class="slider-signs">
-            <span>{{complexity.min}}</span>
-            <span>{{complexity.max}}</span>
+        <div class="difficulty-container">
+          <div class="slider">
+            <div class="slider-signs">
+              <span>{{difficulty.min}}</span>
+              <span>{{difficulty.max}}</span>
+            </div>
+            <b-form-input
+              type="range"
+              :min="difficulty.min"
+              :max="difficulty.max"
+              :id="difficulty.name"
+              v-model="difficulty.value"
+            />
           </div>
-          <input
-            type="range"
-            :min="complexity.min"
-            :max="complexity.max"
-            :id="complexity.name"
-            v-model="complexity.value"
-          />
-          <div>{{complexity.name}}: {{complexity.value}} минут</div>
+          <div>{{difficulty.name}}: {{difficulty.value}}</div>
         </div>
-
+        <br />
         <div class="duration-container">
-          <div class="slider-signs">
-            <span>{{duration.min}}</span>
-            <span>{{duration.max}}</span>
+          <div class="slider">
+            <div class="slider-signs">
+              <span>{{duration.min}}</span>
+              <span>{{duration.max}}</span>
+            </div>
+            <b-form-input
+              type="range"
+              :min="duration.min"
+              :max="duration.max"
+              :id="duration.name"
+              v-model="duration.value"
+            />
           </div>
-          <input
-            type="range"
-            :min="duration.min"
-            :max="duration.max"
-            :id="duration.name"
-            v-model="duration.value"
-          />
-          <div>{{duration.name}}: {{duration.value}}</div>
+          <div>{{duration.name}}: {{duration.value}} минут</div>
         </div>
       </ul>
+      <br />
 
       <ul class="types-container">
-        <li v-for="type in typeNames" :key="type">
-          <input type="checkbox" v-model="selectedTypes" :id="type" :value="type" />
-          <label :for="type">{{type}}</label>
+        <li v-for="{name, symbol} in operations" :key="name">
+          <b-form-checkbox
+            type="checkbox"
+            v-model="selectedOperations"
+            :id="name"
+            :value="symbol"
+          >{{name}}</b-form-checkbox>
         </li>
       </ul>
     </section>
-    <button class='play-button'>
-      Play
-    </button>
+    <b-button variant="outline-primary" @click="startGame()">PLAY</b-button>
   </div>
 </template>
 
 <script>
-const typeNames = [
-  "Суммирование",
-  "Разность",
-  "Умножение",
-  "Деление",
-  "Возведение в степень"
-];
+import { mapState } from "vuex";
+import {
+  SET_DURATION,
+  SET_DIFFICULTY,
+  SET_OPERATION_TYPES,
+  settingsKeys,
+  operations
+} from "../constants";
+
+const { DURATION, DIFFICULTY } = settingsKeys;
+
 export default {
   name: "Settings",
   props: {},
+  methods: {
+    startGame() {
+      this.$store.commit(SET_DURATION, this.duration.value);
+      this.$store.commit(SET_DIFFICULTY, this.difficulty.value);
+      this.$store.commit(SET_OPERATION_TYPES, this.selectedOperations);
+      this.$router.push({
+        path: "playground"
+      });
+    }
+  },
   data: function() {
     return {
       greeting: "Привет!",
       overviewMessage: "Здесь будет общая информация",
-      selectedTypes: [],
-      typeNames,
-      complexity: {
-        name: "Сложность",
-        value: "7",
-        min: 1,
-        max: 15
-      },
-      duration: {
-        name: "Длительность",
-        value: "5",
-        min: 1,
-        max: 10
-      },
-      trainingDay:'',
+      selectedOperations: [],
+      trainingDay: "",
+      operations,
       result: {
         last: {
           total: 0,
           solved: 0
-        }, 
+        },
         current: {
-          total: '',
-          solved: ''
+          total: "",
+          solved: ""
         }
       }
     };
   },
-  computed: 
-  {
+  computed: {
+    ...mapState([DURATION, DIFFICULTY]),
     getOverviewMessage() {
       return `Добро пожаловать на ${this.trainingDay} тренировочный день!
 
-      Ваш последний результат - решено ${this.result.solved} из ${this.result.total}.
-      Общая точность ${this.result.solved/this.result.solved}%.
-      `
-    }
-    // console.log("created!2");
+      Ваш последний результат - решено ${this.result.solved} из ${
+        this.result.total
+      }.
+      Общая точность ${this.result.solved / this.result.solved}%.
+      `;
+    },
+
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+section {
+  margin-top: 30px;
+}
+
 ul {
   list-style: none;
 }
 
 .slider-signs {
   display: flex;
-  width: 135px;
   justify-content: space-between;
 }
 
-.complexity-container,
-.duration-container {
+.duration-contaPciner {
   margin-bottom: 30px;
+}
+
+input[range],
+.slider {
+  width: 200px;
+}
+
+.btn-link {
+  border: 1px solid black;
 }
 </style>
