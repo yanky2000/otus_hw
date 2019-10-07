@@ -1,7 +1,10 @@
 <template>
   <div class="playground">
     <h1>Здесь будет основное окно</h1>
+    <b-button @click="increment" variant="primary">Increment</b-button>
     {{firstArgument}}!!
+    {{secondArgument}}!!
+    {{count}}
     <!-- {{query.duration.value}}
     {{settings}}-->
     <b-button variant="outline-primary">Отмена</b-button>
@@ -26,20 +29,28 @@
 
 
 <script>
+import store from "../store/";
+import { INCREMENT } from "../contants";
+
 export default {
   name: "Playground",
   props: ["query"],
   computed: {
-    getRandomArbitrary() {
-      console.log('hello')
+    count() {
+      return store.state.count;
+    },
+
+    secondArgument() {
+      return this.firstArgument + 1;
+      // console.log('hello')
       // const { min, max } = this.range;
       // return Math.random() * (max - min) + min;
     }
   },
   mounted() {
     const { min, max } = this.range;
-    this.firstArgument = Math.floor(Math.random() * (max - min) + min)
-      
+    this.firstArgument = Math.floor(Math.random() * (max - min) + min);
+
     // this.formula = 2;
   },
   data: function() {
@@ -49,6 +60,11 @@ export default {
       characters: ["<", ">", "?", "="],
       firstArgument: ""
     };
+  },
+  methods: {
+    increment() {
+      store.commit(INCREMENT);
+    }
   }
 };
 </script>
