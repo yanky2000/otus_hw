@@ -4,9 +4,11 @@
     <b-button @click="increment" variant="primary">Increment</b-button>
     {{firstArgument}}!!
     {{secondArgument}}!!
-    {{count}}
-    <!-- {{query.duration.value}}
-    {{settings}}-->
+    {{operationTypes}}
+    <h1>
+      {{duration}}
+      {{difficulty}}
+    </h1>
     <b-button variant="outline-primary">Отмена</b-button>
     <div class="buttons-container">
       <b-button
@@ -30,28 +32,24 @@
 
 <script>
 import store from "../store/";
-import { INCREMENT } from "../contants";
+import { mapState } from "vuex";
+import { INCREMENT, settingsKeys } from "../contants";
 
+const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
 export default {
   name: "Playground",
-  props: ["query"],
-  computed: {
-    count() {
-      return store.state.count;
-    },
-
-    secondArgument() {
-      return this.firstArgument + 1;
-      // console.log('hello')
-      // const { min, max } = this.range;
-      // return Math.random() * (max - min) + min;
-    }
-  },
   mounted() {
     const { min, max } = this.range;
     this.firstArgument = Math.floor(Math.random() * (max - min) + min);
 
     // this.formula = 2;
+  },
+  computed: {
+    ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES]),
+
+    secondArgument() {
+      return this.firstArgument + 1;
+    }
   },
   data: function() {
     return {

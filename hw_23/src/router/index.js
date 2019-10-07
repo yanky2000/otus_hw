@@ -16,7 +16,7 @@ export default new Router({
       path: "/playground",
       name: "playground",
       component: Playground,
-      props: (route) => ({ query: route.query.settings })
+      // props: (route) => ({ query: route.query.settings })
     }
     // {
     //   path: '/blog',

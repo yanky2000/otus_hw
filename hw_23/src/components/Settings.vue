@@ -5,23 +5,23 @@
     <section>
       <h2>Настройки</h2>
       <ul class="sliders-container">
-        <div class="complexity-container">
+        <div class="difficulty-container">
           <div class="slider">
             <div class="slider-signs">
-              <span>{{complexity.min}}</span>
-              <span>{{complexity.max}}</span>
+              <span>{{difficulty.min}}</span>
+              <span>{{difficulty.max}}</span>
             </div>
             <b-form-input
               type="range"
-              :min="complexity.min"
-              :max="complexity.max"
-              :id="complexity.name"
-              v-model="complexity.value"
+              :min="difficulty.min"
+              :max="difficulty.max"
+              :id="difficulty.name"
+              v-model="difficulty.value"
             />
           </div>
-          <div>{{complexity.name}}: {{complexity.value}} минут</div>
+          <div>{{difficulty.name}}: {{difficulty.value}}</div>
         </div>
-
+        <br />
         <div class="duration-container">
           <div class="slider">
             <div class="slider-signs">
@@ -36,14 +36,14 @@
               v-model="duration.value"
             />
           </div>
-          <div>{{duration.name}}: {{duration.value}}</div>
+          <div>{{duration.name}}: {{duration.value}} минут</div>
         </div>
       </ul>
+      <br>
 
       <ul class="types-container">
         <li v-for="type in typeNames" :key="type">
           <b-form-checkbox type="checkbox" v-model="selectedTypes" :id="type" :value="type">{{type}}</b-form-checkbox>
-          <!-- <label :for="type">{{type}}</label> -->
         </li>
       </ul>
     </section>
@@ -52,6 +52,11 @@
 </template>
 
 <script>
+import { SET_DURATION, SET_DIFFICULTY, SET_OPERATION_TYPES, settingsKeys } from "../contants";
+import { mapState } from "vuex";
+
+const { DURATION, DIFFICULTY } = settingsKeys;
+
 const typeNames = [
   "Суммирование",
   "Разность",
@@ -64,13 +69,12 @@ export default {
   props: {},
   methods: {
     startGame() {
-      const { complexity, selectedTypes, duration } = this;
+      // const { difficulty, selectedTypes, duration } = this;
+      this.$store.commit(SET_DURATION, this.duration.value);
+      this.$store.commit(SET_DIFFICULTY, this.difficulty.value);
+      this.$store.commit(SET_OPERATION_TYPES, this.selectedTypes);
       this.$router.push({
-        path: "playground",
-        query: {
-          complexity: complexity.value,
-          settings: { selectedTypes, complexity, duration }
-        }
+        path: "playground"
       });
     }
   },
@@ -80,18 +84,6 @@ export default {
       overviewMessage: "Здесь будет общая информация",
       selectedTypes: [],
       typeNames,
-      complexity: {
-        name: "Сложность",
-        value: "7",
-        min: 1,
-        max: 15
-      },
-      duration: {
-        name: "Длительность",
-        value: "5",
-        min: 1,
-        max: 10
-      },
       trainingDay: "",
       result: {
         last: {
@@ -106,6 +98,7 @@ export default {
     };
   },
   computed: {
+    ...mapState([DURATION, DIFFICULTY]),
     getOverviewMessage() {
       return `Добро пожаловать на ${this.trainingDay} тренировочный день!
 
