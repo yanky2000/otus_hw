@@ -3,13 +3,12 @@
     <h1>Здесь будет основное окно</h1>
     <b-button @click="increment" variant="primary">Increment</b-button>
     {{firstArgument}}!!
-    {{secondArgument}}!!
-    {{operationTypes}}
     <h1>
-      {{duration}}
-      {{difficulty}}
+      <!-- JUST: {{operationTypes}} -->
+      <!-- JUST22: {{getRandomOperator()}} -->
+      <h2>RESULT AGAIN{{result}}</h2>
     </h1>
-    <b-button variant="outline-primary">Отмена</b-button>
+    <b-button @click="goToSettings" variant="outline-primary">Отмена</b-button>
     <div class="buttons-container">
       <b-button
         class="number-buttons"
@@ -33,35 +32,61 @@
 <script>
 import store from "../store/";
 import { mapState } from "vuex";
-import { INCREMENT, settingsKeys } from "../contants";
+import { INCREMENT, settingsKeys, operations } from "../constants";
+import { getRandomNumber } from "../utils";
 
 const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
+
 export default {
   name: "Playground",
+  // props: ['operationTypes'],
   mounted() {
     const { min, max } = this.range;
-    this.firstArgument = Math.floor(Math.random() * (max - min) + min);
-
-    // this.formula = 2;
+    this.firstArgument = getRandomNumber(min, max);
+    this.firstOperand = this.getRandomOperator();
+    this.secondOperand = this.getRandomOperator();
+    this.result = eval(
+      this.firstArgument +
+        this.firstOperand +
+        this.getRandomNumber(min, max) +
+        this.secondOperand +
+        this.getRandomNumber(min, max)
+    );
+    debugger;
   },
   computed: {
     ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES]),
 
-    secondArgument() {
-      return this.firstArgument + 1;
+    getRandomNumber() {
+      const { min, max } = this.range;
+      return Math.floor(Math.random() * (max - min) + min);
     }
   },
   data: function() {
     return {
-      range: { min: 1, max: 100 },
+      range: { min: 1, max: 100 }, // TODO: Привязать к сложности
       numbers: 9,
       characters: ["<", ">", "?", "="],
-      firstArgument: ""
+      firstArgument: "",
+      result: ""
     };
   },
   methods: {
     increment() {
       store.commit(INCREMENT);
+    },
+
+    getRandomOperator() {
+      const ran = this.operationTypes[
+        getRandomNumber(0, this.operationTypes.length)
+      ];
+      const oper = operations[ran];
+      console.log(111, oper);
+      return oper;
+    },
+
+    goToSettings() {
+      this.$router.push({ path: "/" });
     }
   }
 };

@@ -39,11 +39,16 @@
           <div>{{duration.name}}: {{duration.value}} минут</div>
         </div>
       </ul>
-      <br>
+      <br />
 
       <ul class="types-container">
-        <li v-for="type in typeNames" :key="type">
-          <b-form-checkbox type="checkbox" v-model="selectedTypes" :id="type" :value="type">{{type}}</b-form-checkbox>
+        <li v-for="operation in operations" :key="operation">
+          <b-form-checkbox
+            type="checkbox"
+            v-model="selectedOperations"
+            :id="operation"
+            :value="operation"
+          >{{operation}}</b-form-checkbox>
         </li>
       </ul>
     </section>
@@ -52,27 +57,33 @@
 </template>
 
 <script>
-import { SET_DURATION, SET_DIFFICULTY, SET_OPERATION_TYPES, settingsKeys } from "../contants";
 import { mapState } from "vuex";
+import {
+  SET_DURATION,
+  SET_DIFFICULTY,
+  SET_OPERATION_TYPES,
+  settingsKeys,
+  operations
+} from "../constants";
 
 const { DURATION, DIFFICULTY } = settingsKeys;
 
-const typeNames = [
-  "Суммирование",
-  "Разность",
-  "Умножение",
-  "Деление",
-  "Возведение в степень"
-];
+// const typeNames = [
+//   "Суммирование",
+//   "Разность",
+//   "Умножение",
+//   "Деление",
+//   "Возведение в степень"
+// ];
 export default {
   name: "Settings",
   props: {},
   methods: {
     startGame() {
-      // const { difficulty, selectedTypes, duration } = this;
+      // const { difficulty, selectedOperations, duration } = this;
       this.$store.commit(SET_DURATION, this.duration.value);
       this.$store.commit(SET_DIFFICULTY, this.difficulty.value);
-      this.$store.commit(SET_OPERATION_TYPES, this.selectedTypes);
+      this.$store.commit(SET_OPERATION_TYPES, this.selectedOperations);
       this.$router.push({
         path: "playground"
       });
@@ -82,8 +93,7 @@ export default {
     return {
       greeting: "Привет!",
       overviewMessage: "Здесь будет общая информация",
-      selectedTypes: [],
-      typeNames,
+      selectedOperations: [],
       trainingDay: "",
       result: {
         last: {
@@ -107,8 +117,9 @@ export default {
       }.
       Общая точность ${this.result.solved / this.result.solved}%.
       `;
-    }
-    // console.log("created!2");
+    },
+    operations: () => Object.keys(operations)
+
   }
 };
 </script>

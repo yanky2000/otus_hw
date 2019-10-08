@@ -6,7 +6,7 @@ import {
 	SET_DURATION,
 	settingsKeys,
 	SET_OPERATION_TYPES
-} from '../contants';
+} from '../constants';
 
 Vue.use(Vuex);
 
