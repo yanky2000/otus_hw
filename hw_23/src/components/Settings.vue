@@ -68,19 +68,11 @@ import {
 
 const { DURATION, DIFFICULTY } = settingsKeys;
 
-// const typeNames = [
-//   "Суммирование",
-//   "Разность",
-//   "Умножение",
-//   "Деление",
-//   "Возведение в степень"
-// ];
 export default {
   name: "Settings",
   props: {},
   methods: {
     startGame() {
-      // const { difficulty, selectedOperations, duration } = this;
       this.$store.commit(SET_DURATION, this.duration.value);
       this.$store.commit(SET_DIFFICULTY, this.difficulty.value);
       this.$store.commit(SET_OPERATION_TYPES, this.selectedOperations);
@@ -93,7 +85,6 @@ export default {
     return {
       greeting: "Привет!",
       overviewMessage: "Здесь будет общая информация",
-      operands: Object.keys(operations),
       selectedOperations: [],
       trainingDay: "",
       operations,
@@ -120,7 +111,6 @@ export default {
       Общая точность ${this.result.solved / this.result.solved}%.
       `;
     },
-    // operations: () => Object.keys(operations)
 
   }
 };

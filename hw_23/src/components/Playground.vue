@@ -5,24 +5,29 @@
     <div class="task-container">
       <div class="task-panel">
         <span class="first-argument">{{firstArgument}}</span>
-        {{firstOperand}} __ {{secondOperand}} __
+        {{firstOperand}}
+        <span v-if="isResultsVisible">
+          {{secondArgument}}
+          {{secondOperand}}
+          {{thirdArgument}}
+        </span>
+        <span v-else>
+          __
+          {{secondOperand}} __
+        </span>
       </div>
       <div>= {{result}} ?</div>
     </div>
-    rand: {{randNumsRangs()}}
-    <keyboard />
+    <keyboard :showResults="showResults" />
+    <button @click="goTimer()">timer</button>
   </div>
 </template>
 
-
-
-
 <script>
-import store from "../store/";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import Keyboard from "./Keyboard";
-import { INCREMENT, settingsKeys, operations } from "../constants";
-// import { getRandomNumber } from "../utils";
+import store from "../store/";
+import { INCREMENT, settingsKeys, operations, STOP_TIMER } from "../constants";
 
 const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
 
@@ -32,65 +37,56 @@ export default {
 
   computed: {
     ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES])
-
-    // max(state) {
-    //   return state.difficulty.value;
-    // }
+    // ...mapActions({
+    //   goTimer: "timer" // 'countDown'
+    // })
   },
   data: function() {
     return {
       randNumsRangs() {
         return { min: 1, max: 10 ** this.difficulty };
       },
-      // range: { min: 1, max: 100 }, // TODO: Привязать к сложности
-
-      numbers: 9,
 
       firstArgument: "",
       firstOperand: "",
       secondOperand: "",
-      result: ""
+      result: "",
+      isResultsVisible: false
     };
   },
   methods: {
-    getRandomNumber(min = 1, max = (10**this.difficulty)) {
-      const r = Math.floor(Math.random() * (max - min) + min);
-      // FIXME:  почему нулевые значения после 22 в консоли ?
-      console.log(22, r);
-      return r;
+    getRandomNumber(min = 1, max = 10 ** this.difficulty) {
+      return Math.floor(Math.random() * (max - min) + min);
     },
 
     getRandomOperator() {
-      // TODO: оставить только возвр значение
-      const random = this.getRandomNumber(0, this.operationTypes.length);
-      const ran = this.operationTypes[
+      return this.operationTypes[
         this.getRandomNumber(0, this.operationTypes.length)
       ];
-      // const oper = operations[ran];
-      console.log(5, ran);
-      return ran;
+    },
+
+    goTimer() {
+      console.log("timer starts with hardcoded 1000ms");
+      this.$store.dispatch("timer", 1000);
     },
 
     makeFormula() {
       this.firstArgument = this.getRandomNumber();
+      this.secondArgument = this.getRandomNumber();
+      this.thirdArgument = this.getRandomNumber();
       this.firstOperand = this.getRandomOperator();
       this.secondOperand = this.getRandomOperator();
       this.result = eval(
         this.firstArgument +
           this.firstOperand +
-          this.getRandomNumber() +
+          this.secondArgument +
           this.secondOperand +
-          this.getRandomNumber()
+          this.thirdArgument
       );
+    },
 
-      console.info(
-        1,
-        this.firstArgument,
-        this.firstOperand,
-        this.secondOperand,
-        this.result
-      );
-      return this.result;
+    showResults() {
+      this.isResultsVisible = !this.isResultsVisible;
     },
 
     goToSettings() {
@@ -100,15 +96,13 @@ export default {
 
   mounted() {
     this.makeFormula();
+    // this.startTimer();
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.number-buttons {
-}
-
 .task-container {
   font-size: 36px;
 }
