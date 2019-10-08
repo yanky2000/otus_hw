@@ -9,10 +9,12 @@
 <script>
 // import Settings from './components/Settings.vue'
 // import Playground from './components/Playground.vue'
+import Keyboard from './components/Keyboard.vue'
 
 export default {
   name: 'app',
   components: {
+    Keyboard
     // Settings,
     // Playground
   }

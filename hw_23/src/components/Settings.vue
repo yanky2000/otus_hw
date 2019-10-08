@@ -42,13 +42,13 @@
       <br />
 
       <ul class="types-container">
-        <li v-for="operation in operations" :key="operation">
+        <li v-for="{name, symbol} in operations" :key="name">
           <b-form-checkbox
             type="checkbox"
             v-model="selectedOperations"
-            :id="operation"
-            :value="operation"
-          >{{operation}}</b-form-checkbox>
+            :id="name"
+            :value="symbol"
+          >{{name}}</b-form-checkbox>
         </li>
       </ul>
     </section>
@@ -93,8 +93,10 @@ export default {
     return {
       greeting: "Привет!",
       overviewMessage: "Здесь будет общая информация",
+      operands: Object.keys(operations),
       selectedOperations: [],
       trainingDay: "",
+      operations,
       result: {
         last: {
           total: 0,
@@ -118,7 +120,7 @@ export default {
       Общая точность ${this.result.solved / this.result.solved}%.
       `;
     },
-    operations: () => Object.keys(operations)
+    // operations: () => Object.keys(operations)
 
   }
 };

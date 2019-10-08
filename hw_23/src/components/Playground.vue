@@ -1,28 +1,16 @@
 <template>
   <div class="playground">
-    <h1>Здесь будет основное окно</h1>
-    <b-button @click="increment" variant="primary">Increment</b-button>
-    {{firstArgument}}!!
-    <h1>
-      <!-- JUST: {{operationTypes}} -->
-      <!-- JUST22: {{getRandomOperator()}} -->
-      <h2>RESULT AGAIN{{result}}</h2>
-    </h1>
     <b-button @click="goToSettings" variant="outline-primary">Отмена</b-button>
-    <div class="buttons-container">
-      <b-button
-        class="number-buttons"
-        variant="warning"
-        v-for="item in numbers"
-        :key="item"
-      >{{item}}</b-button>
-      <b-button
-        class="number-buttons"
-        variant="warning"
-        v-for="char in characters"
-        :key="char"
-      >{{char}}</b-button>
+
+    <div class="task-container">
+      <div class="task-panel">
+        <span class="first-argument">{{firstArgument}}</span>
+        {{firstOperand}} __ {{secondOperand}} __
+      </div>
+      <div>= {{result}} ?</div>
     </div>
+    rand: {{randNumsRangs()}}
+    <keyboard />
   </div>
 </template>
 
@@ -32,71 +20,103 @@
 <script>
 import store from "../store/";
 import { mapState } from "vuex";
+import Keyboard from "./Keyboard";
 import { INCREMENT, settingsKeys, operations } from "../constants";
-import { getRandomNumber } from "../utils";
+// import { getRandomNumber } from "../utils";
 
 const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
 
 export default {
   name: "Playground",
-  // props: ['operationTypes'],
-  mounted() {
-    const { min, max } = this.range;
-    this.firstArgument = getRandomNumber(min, max);
-    this.firstOperand = this.getRandomOperator();
-    this.secondOperand = this.getRandomOperator();
-    this.result = eval(
-      this.firstArgument +
-        this.firstOperand +
-        this.getRandomNumber(min, max) +
-        this.secondOperand +
-        this.getRandomNumber(min, max)
-    );
-    debugger;
-  },
-  computed: {
-    ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES]),
+  components: { Keyboard },
 
-    getRandomNumber() {
-      const { min, max } = this.range;
-      return Math.floor(Math.random() * (max - min) + min);
-    }
+  computed: {
+    ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES])
+
+    // max(state) {
+    //   return state.difficulty.value;
+    // }
   },
   data: function() {
     return {
-      range: { min: 1, max: 100 }, // TODO: Привязать к сложности
+      randNumsRangs() {
+        return { min: 1, max: 10 ** this.difficulty };
+      },
+      // range: { min: 1, max: 100 }, // TODO: Привязать к сложности
+
       numbers: 9,
-      characters: ["<", ">", "?", "="],
+
       firstArgument: "",
+      firstOperand: "",
+      secondOperand: "",
       result: ""
     };
   },
   methods: {
-    increment() {
-      store.commit(INCREMENT);
+    getRandomNumber(min = 1, max = (10**this.difficulty)) {
+      const r = Math.floor(Math.random() * (max - min) + min);
+      // FIXME:  почему нулевые значения после 22 в консоли ?
+      console.log(22, r);
+      return r;
     },
 
     getRandomOperator() {
+      // TODO: оставить только возвр значение
+      const random = this.getRandomNumber(0, this.operationTypes.length);
       const ran = this.operationTypes[
-        getRandomNumber(0, this.operationTypes.length)
+        this.getRandomNumber(0, this.operationTypes.length)
       ];
-      const oper = operations[ran];
-      console.log(111, oper);
-      return oper;
+      // const oper = operations[ran];
+      console.log(5, ran);
+      return ran;
+    },
+
+    makeFormula() {
+      this.firstArgument = this.getRandomNumber();
+      this.firstOperand = this.getRandomOperator();
+      this.secondOperand = this.getRandomOperator();
+      this.result = eval(
+        this.firstArgument +
+          this.firstOperand +
+          this.getRandomNumber() +
+          this.secondOperand +
+          this.getRandomNumber()
+      );
+
+      console.info(
+        1,
+        this.firstArgument,
+        this.firstOperand,
+        this.secondOperand,
+        this.result
+      );
+      return this.result;
     },
 
     goToSettings() {
       this.$router.push({ path: "/" });
     }
+  },
+
+  mounted() {
+    this.makeFormula();
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.buttons-container {
-  display: flex;
-}
 .number-buttons {
+}
+
+.task-container {
+  font-size: 36px;
+}
+
+.first-argument {
+  color: black;
+}
+.task-panel {
+  color: grey;
 }
 </style>
