@@ -21,10 +21,10 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		[SET_DURATION]: (state, duration) => {
-			state[DURATION] = duration;
+			state[DURATION].value = duration;
 		},
 		[SET_DIFFICULTY]: (state, difficulty) => {
-			state[DIFFICULTY] = difficulty;
+			state[DIFFICULTY].value = difficulty;
 		},
 		[SET_OPERATION_TYPES]: (state, operations) => {
 			state[OPERATION_TYPES] = operations;

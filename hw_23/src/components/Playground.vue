@@ -26,8 +26,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import Keyboard from "./Keyboard";
-import store from "../store/";
-import { INCREMENT, settingsKeys, operations, STOP_TIMER } from "../constants";
+import { settingsKeys, operations, STOP_TIMER } from "../constants";
 
 const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
 
@@ -44,7 +43,7 @@ export default {
   data: function() {
     return {
       randNumsRangs() {
-        return { min: 1, max: 10 ** this.difficulty };
+        return { min: 1, max: 10 ** this.difficulty.value };
       },
 
       firstArgument: "",
@@ -55,11 +54,12 @@ export default {
     };
   },
   methods: {
-    getRandomNumber(min = 1, max = 10 ** this.difficulty) {
+    getRandomNumber(min = 1, max = 10 ** this.difficulty.value) {
       return Math.floor(Math.random() * (max - min) + min);
     },
 
     getRandomOperator() {
+      console.log(22, this.operationTypes.length)
       return this.operationTypes[
         this.getRandomNumber(0, this.operationTypes.length)
       ];
