@@ -1,7 +1,16 @@
 <template>
   <div class="settings">
     <h1>{{greeting}}</h1>
-    <div>{{getOverviewMessage}}</div>
+    <div>
+      {{
+      `Добро пожаловать на ${trainingDay} тренировочный день!
+      Ваш последний результат - решено ${result.solved} из ${
+      result.total
+      }.
+      Общая точность ${accuracy}%.
+      `
+      }}
+    </div>
     <section>
       <h2>Настройки</h2>
       <ul class="sliders-container">
@@ -16,7 +25,7 @@
               :min="difficulty.min"
               :max="difficulty.max"
               :id="difficulty.name"
-              v-model="difficulty.value"
+              v-model="difficultyControl"
             />
           </div>
           <div>{{difficulty.name}}: {{difficulty.value}}</div>
@@ -33,21 +42,20 @@
               :min="duration.min"
               :max="duration.max"
               :id="duration.name"
-              v-model="duration.value"
+              v-model="durationControl"
             />
           </div>
           <div>{{duration.name}}: {{duration.value}} минут</div>
         </div>
       </ul>
       <br />
-
       <ul class="types-container">
-        <li v-for="{name, symbol} in operations" :key="name">
+        <li v-for="{name, symbol} in operationTypes" :key="name">
           <b-form-checkbox
             type="checkbox"
-            v-model="selectedOperations"
             :id="name"
             :value="symbol"
+            v-model="selectedOperations"
           >{{name}}</b-form-checkbox>
         </li>
       </ul>
@@ -61,12 +69,8 @@ import { mapState } from "vuex";
 import {
   SET_DURATION,
   SET_DIFFICULTY,
-  SET_OPERATION_TYPES,
-  settingsKeys,
-  operations
-} from "../constants";
-
-const { DURATION, DIFFICULTY } = settingsKeys;
+  SET_OPERATION_TYPES
+} from "../store/mutationTypes";
 
 export default {
   name: "Settings",
@@ -85,9 +89,8 @@ export default {
     return {
       greeting: "Привет!",
       overviewMessage: "Здесь будет общая информация",
-      selectedOperations: [],
       trainingDay: "",
-      operations,
+      selectedOperations: [],
       result: {
         last: {
           total: 0,
@@ -101,17 +104,26 @@ export default {
     };
   },
   computed: {
-    ...mapState([DURATION, DIFFICULTY]),
-    getOverviewMessage() {
-      return `Добро пожаловать на ${this.trainingDay} тренировочный день!
-
-      Ваш последний результат - решено ${this.result.solved} из ${
-        this.result.total
-      }.
-      Общая точность ${this.result.solved / this.result.solved}%.
-      `;
+    ...mapState(["duration", "difficulty", "operationTypes"]),
+    accuracy() {
+      return this.result.solved ? this.result.solved / this.result.solved : 0;
     },
-
+    difficultyControl: {
+      get() {
+        return this.difficulty.value;
+      },
+      set(difficulty) {
+        this.$store.commit(SET_DIFFICULTY, difficulty);
+      }
+    },
+    durationControl: {
+      get() {
+        return this.duration.value;
+      },
+      set(duration) {
+        this.$store.commit(SET_DURATION, duration);
+      }
+    }
   }
 };
 </script>

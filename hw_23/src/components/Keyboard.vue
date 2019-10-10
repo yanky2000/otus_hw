@@ -27,7 +27,6 @@
 <script>
 export default {
   name: "Keyboard",
-  props: ['showResults'],
   data: function() {
     return {
       raws: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]],
@@ -35,13 +34,13 @@ export default {
     };
   },
   methods: {
-    charsPressed(e) {
-      if(e === '?') {
-        this.showResults()
+    charsPressed(char) {
+      if (char === "?") {
+        this.$emit("help");
       }
     },
-    insertNumber(e) {
-      console.log(e);
+    insertNumber(number) {
+      // console.log(e);
     }
   }
 };

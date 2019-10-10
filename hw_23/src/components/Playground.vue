@@ -18,33 +18,29 @@
       </div>
       <div>= {{result}} ?</div>
     </div>
-    <keyboard :showResults="showResults" />
+    <keyboard @help='showResults'/>
     <button @click="goTimer()">timer</button>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import Keyboard from "./Keyboard";
-import store from "../store/";
-import { INCREMENT, settingsKeys, operations, STOP_TIMER } from "../constants";
-
-const { DURATION, DIFFICULTY, OPERATION_TYPES } = settingsKeys;
 
 export default {
   name: "Playground",
   components: { Keyboard },
 
   computed: {
-    ...mapState([DURATION, DIFFICULTY, OPERATION_TYPES])
-    // ...mapActions({
-    //   goTimer: "timer" // 'countDown'
-    // })
+    ...mapState([
+      'duration',
+      'difficulty', 
+      'selectedOperations'])
   },
   data: function() {
     return {
       randNumsRangs() {
-        return { min: 1, max: 10 ** this.difficulty };
+        return { min: 1, max: 10 ** this.difficulty.value };
       },
 
       firstArgument: "",
@@ -55,18 +51,18 @@ export default {
     };
   },
   methods: {
-    getRandomNumber(min = 1, max = 10 ** this.difficulty) {
+    getRandomNumber(min = 1, max = 10 ** this.difficulty.value) {
       return Math.floor(Math.random() * (max - min) + min);
     },
 
     getRandomOperator() {
-      return this.operationTypes[
-        this.getRandomNumber(0, this.operationTypes.length)
+      return this.selectedOperations[
+        this.getRandomNumber(0, this.selectedOperations.length)
       ];
     },
 
     goTimer() {
-      console.log("timer starts with hardcoded 1000ms");
+      // console.log("timer starts with hardcoded 1000ms");
       this.$store.dispatch("timer", 1000);
     },
 
@@ -96,7 +92,6 @@ export default {
 
   mounted() {
     this.makeFormula();
-    // this.startTimer();
   }
 };
 </script>
